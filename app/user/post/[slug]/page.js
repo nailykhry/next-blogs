@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-import { useNotification } from '@/app/context/NotificationContext'; 
+import { useNotification } from '@/app/context/NotificationContext';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import RichTextRenderer from '@/app/components/RichTextRenderer';
@@ -23,9 +23,9 @@ export default function PostPage({ params: paramsPromise }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { showNotification } = useNotification(); 
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     async function fetchPostBySlug() {
@@ -59,17 +59,17 @@ export default function PostPage({ params: paramsPromise }) {
         method: 'DELETE',
       });
       if (response.ok) {
-        showNotification('Post successfully deleted!', 'success'); 
+        showNotification('Post successfully deleted!', 'success');
         router.push('/user/post');
       } else {
-        showNotification('Failed to delete post!', 'danger'); 
+        showNotification('Failed to delete post!', 'danger');
       }
     } catch (err) {
       setError(err.message);
-      showNotification('Failed to delete post!', 'danger'); 
+      showNotification('Failed to delete post!', 'danger');
     } finally {
       setIsDeleting(false);
-      setIsModalOpen(false); 
+      setIsModalOpen(false);
     }
   };
 
@@ -107,7 +107,7 @@ export default function PostPage({ params: paramsPromise }) {
             </div>
           )}
         </div>
-        <p className='mb-2 font-bold text-gray-500'>
+        <p className="mb-2 font-bold text-gray-500">
           <VisibilityIcon className="w-5 h-5 mr-1 text-gray-500" />
           {post.views} views
         </p>
@@ -116,7 +116,6 @@ export default function PostPage({ params: paramsPromise }) {
           <span className="font-semibold">{post.user.name}</span>
         </p>
 
-     
         <div className="mb-6">
           <div className="mt-2 space-x-4">
             {post.categories.map((category) => (
@@ -130,7 +129,6 @@ export default function PostPage({ params: paramsPromise }) {
           </div>
         </div>
 
-      
         <RichTextRenderer content={post.content} />
       </article>
 
@@ -138,7 +136,9 @@ export default function PostPage({ params: paramsPromise }) {
       {isModalOpen && (
         <div className="fixed inset-0 top-0 left-0 z-50 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50">
           <div className="w-full max-w-sm p-6 bg-white rounded-lg shadow-lg">
-            <h3 className="mb-4 text-lg font-semibold">Are you sure you want to delete this post?</h3>
+            <h3 className="mb-4 text-lg font-semibold">
+              Are you sure you want to delete this post?
+            </h3>
             <div className="flex justify-between">
               <button
                 onClick={handleCancel}

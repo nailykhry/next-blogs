@@ -5,15 +5,14 @@ import { useRouter, useParams } from 'next/navigation';
 import { Listbox } from '@headlessui/react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
-import { useNotification } from '@/app/context/NotificationContext'; 
-
+import { useNotification } from '@/app/context/NotificationContext';
 
 const TextEditor = dynamic(() => import('@/app/components/TextEditor'), {
   ssr: false,
 });
 
 export default function EditPostPage() {
-  const [id, setId] = useState(0); 
+  const [id, setId] = useState(0);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -38,7 +37,7 @@ export default function EditPostPage() {
           setId(postData[0].id);
           setTitle(postData[0].title);
           setContent(postData[0].content);
-        
+
           setSelectedCategories(
             postData[0].categories.map((category) => ({
               id: category.id,
@@ -73,13 +72,13 @@ export default function EditPostPage() {
       });
 
       if (response.ok) {
-        showNotification('Post updated successfully!', 'success'); 
+        showNotification('Post updated successfully!', 'success');
         router.push('/user/post');
       } else {
-        showNotification('Error updating post. Please try again.', 'error'); 
+        showNotification('Error updating post. Please try again.', 'error');
       }
     } catch (error) {
-      showNotification('Error updating post. Please try again.', 'error'); 
+      showNotification('Error updating post. Please try again.', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -123,7 +122,9 @@ export default function EditPostPage() {
               {/* Dropdown Button */}
               <Listbox.Button className="w-full px-4 py-3 text-left bg-white border rounded-lg shadow-sm focus:outline-none">
                 {selectedCategories.length > 0
-                  ? selectedCategories.map((category) => category.name).join(', ') 
+                  ? selectedCategories
+                      .map((category) => category.name)
+                      .join(', ')
                   : 'Select categories...'}
               </Listbox.Button>
 
@@ -132,7 +133,7 @@ export default function EditPostPage() {
                 {categories.map((category) => (
                   <Listbox.Option
                     key={category.id}
-                    value={category} 
+                    value={category}
                     className={({ active }) =>
                       `px-4 py-2 text-sm cursor-pointer select-none ${
                         active ? 'bg-gray-100 text-[#4c24e5]' : 'text-gray-800'
@@ -146,9 +147,7 @@ export default function EditPostPage() {
                         >
                           {category.name}
                         </span>
-                        {selected && (
-                          <span className="text-[#4c24e5]">✔</span> 
-                        )}
+                        {selected && <span className="text-[#4c24e5]">✔</span>}
                       </div>
                     )}
                   </Listbox.Option>

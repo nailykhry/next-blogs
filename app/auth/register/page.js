@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useNotification } from '@/app/context/NotificationContext';  
+import { useNotification } from '@/app/context/NotificationContext';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { showNotification } = useNotification();  
+  const { showNotification } = useNotification();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -45,7 +45,10 @@ export default function RegisterPage() {
       });
 
       if (response.ok) {
-        showNotification('Registration successful! Redirecting to login...', 'success');
+        showNotification(
+          'Registration successful! Redirecting to login...',
+          'success'
+        );
         router.push('/auth/login');
       } else {
         const error = await response.json();
@@ -53,17 +56,27 @@ export default function RegisterPage() {
       }
     } catch (err) {
       console.error('An error occurred:', err);
-      showNotification('An error occurred while submitting the form.', 'danger');
+      showNotification(
+        'An error occurred while submitting the form.',
+        'danger'
+      );
     }
   };
 
   return (
     <section className="bg-[url('/background.png')] bg-cover bg-center min-h-screen flex items-center justify-center">
       <div className="w-full max-w-md p-6 space-y-6 bg-white border rounded-lg shadow-lg sm:p-8">
-        <h1 className="text-2xl font-bold text-center text-gray-900">Create an account</h1>
+        <h1 className="text-2xl font-bold text-center text-gray-900">
+          Create an account
+        </h1>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-900">Your name</label>
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-900"
+            >
+              Your name
+            </label>
             <input
               type="text"
               name="name"
@@ -77,7 +90,12 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-900">Your email</label>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-900"
+            >
+              Your email
+            </label>
             <input
               type="email"
               name="email"
@@ -91,7 +109,12 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-900">Password</label>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-900"
+            >
+              Password
+            </label>
             <input
               type="password"
               name="password"
@@ -105,7 +128,12 @@ export default function RegisterPage() {
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-900">Confirm password</label>
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-900"
+            >
+              Confirm password
+            </label>
             <input
               type="password"
               name="confirmPassword"
@@ -130,7 +158,10 @@ export default function RegisterPage() {
             />
             <label htmlFor="acceptTerms" className="ml-2 text-sm text-gray-500">
               I accept the{' '}
-              <a href="#" className="font-medium text-[#4c24e5] hover:underline">
+              <a
+                href="#"
+                className="font-medium text-[#4c24e5] hover:underline"
+              >
                 Terms and Conditions
               </a>
             </label>
@@ -145,7 +176,10 @@ export default function RegisterPage() {
 
           <p className="text-sm text-center text-gray-500">
             Already have an account?{' '}
-            <a href="/auth/login" className="font-medium text-[#4c24e5] hover:underline">
+            <a
+              href="/auth/login"
+              className="font-medium text-[#4c24e5] hover:underline"
+            >
               Login here
             </a>
           </p>

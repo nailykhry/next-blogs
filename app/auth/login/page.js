@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { useNotification } from '@/app/context/NotificationContext'; 
+import { useNotification } from '@/app/context/NotificationContext';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -31,12 +31,12 @@ export default function LoginPage() {
     });
 
     if (result?.error) {
-      setError(result.error); 
+      setError(result.error);
       showNotification('Invalid credentials. Please try again.', 'error');
     } else {
       setError(null);
-      showNotification('Login successful!', 'success');; 
-      router.push('/user/dashboard'); 
+      showNotification('Login successful!', 'success');
+      router.push('/user/dashboard');
     }
   };
 
@@ -46,7 +46,7 @@ export default function LoginPage() {
         <h1 className="text-2xl font-bold text-center text-gray-900">
           Sign in to your account
         </h1>
-        
+
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label

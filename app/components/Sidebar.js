@@ -15,9 +15,9 @@ import Image from 'next/image';
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname(); 
+  const pathname = usePathname();
 
-  const isActive = (path) => pathname === path; 
+  const isActive = (path) => pathname === path;
 
   return (
     <>
@@ -43,7 +43,6 @@ export default function Sidebar() {
         </svg>
       </button>
 
-     
       <div
         className={`fixed z-50 min-h-screen p-5 m-5 rounded-lg bg-white shadow-lg text-black w-64 transform ${
           isOpen ? 'translate-x-0 left-5 top-20' : '-translate-x-full hidden'
@@ -138,7 +137,6 @@ export default function Sidebar() {
           </li>
         </ul>
       </div>
-
 
       {isOpen && (
         <div

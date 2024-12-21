@@ -55,7 +55,7 @@ export async function PATCH(req) {
 
     if (profileImg) {
       const buffer = Buffer.from(await profileImg.arrayBuffer());
-      const fileName = `${userId}-${Date.now()}.jpg`; 
+      const fileName = `${userId}-${Date.now()}.jpg`;
       const filePath = path.join(process.cwd(), 'public/image', fileName);
 
       await fs.writeFile(filePath, buffer);

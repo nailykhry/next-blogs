@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useNotification } from '@/app/context/NotificationContext'; 
+import { useNotification } from '@/app/context/NotificationContext';
 import Loading from '@/app/components/Loading';
 import Image from 'next/image';
 
@@ -10,7 +10,7 @@ export default function Profile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { showNotification } = useNotification(); 
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -24,7 +24,10 @@ export default function Profile() {
       } catch (error) {
         console.error('Error fetching user:', error);
         setUser(null);
-        showNotification('Failed to fetch user data. Please login again.', 'danger');
+        showNotification(
+          'Failed to fetch user data. Please login again.',
+          'danger'
+        );
       } finally {
         setLoading(false);
       }

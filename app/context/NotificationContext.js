@@ -8,7 +8,6 @@ const notificationStyles = {
   info: 'bg-blue-500 text-white',
 };
 
-
 const NotificationContext = createContext();
 
 export const useNotification = () => {
@@ -17,9 +16,9 @@ export const useNotification = () => {
 
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
-  
+
   const showNotification = useCallback((message, type = 'success') => {
-    const id = new Date().getTime(); 
+    const id = new Date().getTime();
     setNotifications((prevNotifications) => [
       ...prevNotifications,
       { id, message, type },
@@ -31,7 +30,7 @@ export const NotificationProvider = ({ children }) => {
       );
     }, 5000);
   }, []);
-  
+
   return (
     <NotificationContext.Provider value={{ showNotification }}>
       {children}

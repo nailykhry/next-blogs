@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useNotification } from '@/app/context/NotificationContext'; 
+import { useNotification } from '@/app/context/NotificationContext';
 import Loading from '@/app/components/Loading';
 import Image from 'next/image';
 
@@ -20,7 +20,7 @@ export default function ProfileEdit() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch('/api/user'); 
+        const response = await fetch('/api/user');
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
         }
@@ -32,7 +32,7 @@ export default function ProfileEdit() {
         setProfileImage(profileImg || '/image/profile.png');
       } catch (error) {
         console.error('Error fetching user data:', error);
-        showNotification('Failed to load user data.', 'danger'); 
+        showNotification('Failed to load user data.', 'danger');
       } finally {
         setLoading(false);
       }
@@ -47,7 +47,7 @@ export default function ProfileEdit() {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImage(reader.result); 
+        setProfileImage(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -75,11 +75,14 @@ export default function ProfileEdit() {
 
       const updatedUser = await response.json();
       console.log('Profile updated successfully:', updatedUser);
-      showNotification('Profile updated successfully!', 'success'); 
+      showNotification('Profile updated successfully!', 'success');
       router.push('/user/profile');
     } catch (error) {
       console.error('Error updating profile:', error);
-      showNotification('An error occurred while updating the profile.', 'danger'); 
+      showNotification(
+        'An error occurred while updating the profile.',
+        'danger'
+      );
     } finally {
       setSaving(false);
     }

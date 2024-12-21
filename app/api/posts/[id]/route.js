@@ -11,10 +11,13 @@ export async function DELETE(req) {
     }
 
     const url = new URL(req.url);
-    const id = url.pathname.split('/').pop(); 
+    const id = url.pathname.split('/').pop();
 
     if (!id) {
-      return NextResponse.json({ error: 'Post ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Post ID is required' },
+        { status: 400 }
+      );
     }
 
     const post = await prisma.post.findUnique({
@@ -33,7 +36,10 @@ export async function DELETE(req) {
       where: { id: parseInt(id) },
     });
 
-    return NextResponse.json({ message: 'Post deleted successfully' }, { status: 200 });
+    return NextResponse.json(
+      { message: 'Post deleted successfully' },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Error deleting post:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -51,7 +57,10 @@ export async function PUT(req) {
     const id = url.pathname.split('/').pop();
 
     if (!id) {
-      return NextResponse.json({ error: 'Post ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Post ID is required' },
+        { status: 400 }
+      );
     }
 
     const post = await prisma.post.findUnique({
@@ -82,10 +91,10 @@ export async function PUT(req) {
         title,
         content,
         categories: {
-          set: categories.map((catId) => ({ id: catId })), 
+          set: categories.map((catId) => ({ id: catId })),
         },
       },
-      include: { categories: true }, 
+      include: { categories: true },
     });
 
     return NextResponse.json(

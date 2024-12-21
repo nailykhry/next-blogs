@@ -41,7 +41,6 @@ const Categories = ({ params: paramsPromise }) => {
     fetchPosts();
   }, [id]);
 
- 
   const loadMorePosts = () => {
     if (!hasMore || loading) return;
 
@@ -60,7 +59,6 @@ const Categories = ({ params: paramsPromise }) => {
     }, 1000);
   };
 
- 
   const handleSearch = (searchTerm) => {
     if (!searchTerm) {
       setFilteredPosts(displayedPosts);
@@ -77,7 +75,6 @@ const Categories = ({ params: paramsPromise }) => {
       <Navbar />
       <div className="min-h-screen pt-20 bg-white">
         <div className="max-w-6xl px-6 py-12 mx-auto">
-         
           <section className="text-center">
             <h1 className="text-4xl font-bold text-[#4c24e5]">
               {category?.name} Posts

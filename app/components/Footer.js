@@ -5,7 +5,6 @@ export default function Footer() {
     <footer className="py-6 text-white bg-[#4c24e5]">
       <div className="container px-4 mx-auto">
         <div className="flex flex-col items-center justify-between space-y-4 sm:flex-row sm:space-y-0">
-
           <div className="text-center sm:text-left">
             <h2 className="text-lg font-bold">InkSpire</h2>
             <p className="text-sm text-white">
@@ -13,7 +12,6 @@ export default function Footer() {
             </p>
           </div>
 
-         
           <div className="flex space-x-4">
             <Link href="/" className="text-white hover:text-gray-400">
               Home
@@ -26,7 +24,6 @@ export default function Footer() {
             </Link>
           </div>
 
-       
           <div className="flex space-x-4">
             <Link
               href="https://twitter.com"

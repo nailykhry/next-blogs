@@ -3,7 +3,6 @@ import './globals.css';
 import SessionWrapper from './components/SessionWrapper';
 import { NotificationProvider } from '@/app/context/NotificationContext';
 
-
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',
@@ -30,9 +29,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionWrapper>
-          <NotificationProvider>
-            {children}
-          </NotificationProvider>
+          <NotificationProvider>{children}</NotificationProvider>
         </SessionWrapper>
       </body>
     </html>

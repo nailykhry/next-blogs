@@ -89,7 +89,6 @@ const Categories = ({ params: paramsPromise }) => {
       <Navbar />
       <div className="min-h-screen pt-20 bg-white">
         <div className="max-w-6xl px-6 py-12 mx-auto">
-  
           <section className="text-center">
             <h1 className="text-4xl font-bold text-[#4c24e5]">
               {category.name} Posts
@@ -99,10 +98,8 @@ const Categories = ({ params: paramsPromise }) => {
             </p>
           </section>
 
-       
           <SearchBar onSearch={handleSearch} />
 
-       
           {!filteredPosts?.length && (
             <h2 className="pt-5 mt-5 text-center text-gray-500">
               Belum ada data post!

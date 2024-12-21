@@ -127,7 +127,7 @@ async function main() {
       content:
         'JavaScript is a versatile language for both front-end and back-end development...',
       userId: user1.id,
-      views:0
+      views: 0,
     },
     {
       title: 'Mastering React',
@@ -135,7 +135,7 @@ async function main() {
       content:
         'React is a powerful library for building dynamic user interfaces...',
       userId: user1.id,
-      views:0
+      views: 0,
     },
     {
       title: 'Understanding Node.js',
@@ -143,7 +143,7 @@ async function main() {
       content:
         'Node.js allows for building scalable network applications with JavaScript...',
       userId: user1.id,
-      views:0
+      views: 0,
     },
     {
       title: 'CSS Grid and Flexbox',
@@ -151,7 +151,7 @@ async function main() {
       content:
         'Learn the basics of modern layout systems with CSS Grid and Flexbox...',
       userId: user2.id,
-      views:0
+      views: 0,
     },
     {
       title: '10 Best Python Libraries for Data Science',
@@ -159,7 +159,7 @@ async function main() {
       content:
         'Explore the top Python libraries that will help you in data science projects...',
       userId: user2.id,
-      views:0
+      views: 0,
     },
   ];
 

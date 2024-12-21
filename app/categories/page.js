@@ -22,7 +22,7 @@ const Categories = () => {
           const data = await response.json();
           setCategories(data);
           setDisplayedCategories(data.slice(0, categoriesPerLoad));
-          setHasMore(data.length > categoriesPerLoad); 
+          setHasMore(data.length > categoriesPerLoad);
         } else {
           console.error('Failed to fetch categories');
         }
@@ -34,7 +34,6 @@ const Categories = () => {
     fetchCategories();
   }, []);
 
- 
   const loadMoreCategories = () => {
     if (!hasMore || loading) return;
 
@@ -57,18 +56,16 @@ const Categories = () => {
       <Navbar />
       <div className="min-h-screen pt-20 bg-white">
         <div className="max-w-6xl px-6 py-12 mx-auto">
-        
           <section className="px-4 text-center md:px-8">
             <h1 className="text-3xl font-bold text-[#4c24e5] md:text-4xl lg:text-5xl">
               Blog Categories
             </h1>
             <p className="mt-4 text-base text-gray-600 md:text-lg lg:mt-6 lg:max-w-xl lg:mx-auto">
-              Explore diverse topics and find the blogs that inspire and inform you.
+              Explore diverse topics and find the blogs that inspire and inform
+              you.
             </p>
           </section>
 
-
-        
           <section className="grid grid-cols-1 gap-8 mt-12 sm:grid-cols-2 lg:grid-cols-3">
             {displayedCategories.map((category) => (
               <div
@@ -89,7 +86,6 @@ const Categories = () => {
             ))}
           </section>
 
-        
           <StatusLoad loading={loading} hasMore={hasMore} />
           <InfiniteScroll
             onLoadMore={loadMoreCategories}

@@ -14,11 +14,11 @@ const TextEditor = dynamic(() => import('@/app/components/TextEditor'), {
 export default function CreatePostPage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [selectedCategories, setSelectedCategories] = useState([]); 
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { showNotification } = useNotification(); 
+  const { showNotification } = useNotification();
   const router = useRouter();
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function CreatePostPage() {
         body: JSON.stringify({
           title,
           content,
-          categories: selectedCategories.map((category) => category.id), 
+          categories: selectedCategories.map((category) => category.id),
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -57,14 +57,14 @@ export default function CreatePostPage() {
       });
 
       if (response.ok) {
-        showNotification('Post created successfully!', 'success'); 
+        showNotification('Post created successfully!', 'success');
         router.push('/user/post');
       } else {
-        showNotification('Error creating post. Please try again.', 'error'); 
+        showNotification('Error creating post. Please try again.', 'error');
       }
     } catch (error) {
       console.error('Error creating post:', error);
-      showNotification('An error occurred while creating the post.', 'error'); 
+      showNotification('An error occurred while creating the post.', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -101,7 +101,9 @@ export default function CreatePostPage() {
             <div className="relative">
               <Listbox.Button className="w-full px-4 py-3 text-left bg-white border rounded-lg shadow-sm focus:outline-none">
                 {selectedCategories.length > 0
-                  ? selectedCategories.map((category) => category.name).join(', ') 
+                  ? selectedCategories
+                      .map((category) => category.name)
+                      .join(', ')
                   : 'Select categories...'}
               </Listbox.Button>
 
@@ -109,7 +111,7 @@ export default function CreatePostPage() {
                 {categories.map((category) => (
                   <Listbox.Option
                     key={category.id}
-                    value={category} 
+                    value={category}
                     className={({ active }) =>
                       `px-4 py-2 text-sm cursor-pointer select-none ${
                         active ? 'bg-gray-100 text-[#4c24e5]' : 'text-gray-800'
@@ -123,9 +125,7 @@ export default function CreatePostPage() {
                         >
                           {category.name}
                         </span>
-                        {selected && (
-                          <span className="text-[#4c24e5]">✔</span> 
-                        )}
+                        {selected && <span className="text-[#4c24e5]">✔</span>}
                       </div>
                     )}
                   </Listbox.Option>

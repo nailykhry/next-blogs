@@ -10,6 +10,8 @@ import Loading from '@/app/components/Loading';
 export default function PostsPage() {
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
+
+  /* eslint-disable */
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -34,7 +36,6 @@ export default function PostsPage() {
     fetchPosts();
   }, []);
 
-
   const handleSearch = (query) => {
     setSearchQuery(query);
     const filtered = posts.filter(
@@ -43,10 +44,9 @@ export default function PostsPage() {
         post.content.toLowerCase().includes(query.toLowerCase())
     );
     setFilteredPosts(filtered);
-    setPage(1); 
+    setPage(1);
   };
 
- 
   const startIndex = (page - 1) * POSTS_PER_PAGE;
   const currentPosts = filteredPosts.slice(
     startIndex,
@@ -54,7 +54,6 @@ export default function PostsPage() {
   );
   const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
 
- 
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
@@ -71,10 +70,8 @@ export default function PostsPage() {
         help you grow.
       </p>
 
-
       <SearchBar onSearch={handleSearch} />
 
- 
       {filteredPosts.length === 0 ? (
         <div className="text-center p-6 mt-6 bg-[#f9fafb] rounded-lg shadow-md">
           <h3 className="text-lg font-semibold text-black">

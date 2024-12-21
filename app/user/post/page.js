@@ -10,6 +10,8 @@ import Loading from '@/app/components/Loading';
 export default function PostsPage() {
   const [posts, setPosts] = useState([]);
   const [filteredPosts, setFilteredPosts] = useState([]);
+
+  /* eslint-disable */
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);

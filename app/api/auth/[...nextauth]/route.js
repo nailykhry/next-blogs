@@ -40,7 +40,7 @@ export const authOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    strategy: 'jwt', 
+    strategy: 'jwt',
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -64,8 +64,8 @@ export const authOptions = {
     },
   },
   pages: {
-    signIn: '/auth/login', 
-    error: '/auth/login', 
+    signIn: '/auth/login',
+    error: '/auth/login',
   },
 };
 

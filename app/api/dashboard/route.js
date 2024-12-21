@@ -23,60 +23,58 @@ export async function GET(req) {
       : undefined;
 
     const userFilter = {
-        userId: session.user.id
+      userId: session.user.id,
     };
 
-   
     const filters = {
       ...yearFilter,
       ...userFilter,
     };
 
+    /* eslint-disable */
     const data = await Promise.all([
-        // Ambil postingan terbaru
-        prisma.post.findMany({
-          include: { user: true, categories: true },
-          where: filters,
-          orderBy: { createdAt: 'desc' },
-          take: 3,
-        }),
-        // Hitung total postingan
-        prisma.post.count({
-          where: filters,
-        }),
-        // Jumlahkan total views
-        prisma.post.aggregate({
-          where: filters,
-          _sum: { views: true },
-        }),
-        // Ambil kategori paling populer
-        prisma.Category.findMany({
-          select: { name: true },
-          where: {
-            posts: {
-              some: filters,
-            },
-          },
-          orderBy: {
-            posts: { _count: 'desc' },
-          },
-          take: 1,
-        }),
-    ]);
+      prisma.post.findMany({
+        include: { user: true, categories: true },
+        where: filters,
+        orderBy: { createdAt: 'desc' },
+        take: 3,
+      }),
       
-   
+      prisma.post.count({
+        where: filters,
+      }),
+    
+      prisma.post.aggregate({
+        where: filters,
+        _sum: { views: true },
+      }),
+      
+      prisma.Category.findMany({
+        select: { name: true },
+        where: {
+          posts: {
+            some: filters,
+          },
+        },
+        orderBy: {
+          posts: { _count: 'desc' },
+        },
+        take: 1,
+      }),
+    ]);
+
     const [posts, totalPosts, totalViews, tags] = data;
 
     const popularTags = tags[0]?.name;
 
-    const viewsCount = totalViews._sum.views || 0; 
+    const viewsCount = totalViews._sum.views || 0;
 
     return NextResponse.json(
       {
         posts,
         totalPosts,
         viewsCount,
-        popularTags
+        popularTags,
       },
       { status: 200 }
     );

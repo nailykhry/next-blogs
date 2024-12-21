@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
-import { useNotification } from '@/app/context/NotificationContext'; 
+import { useNotification } from '@/app/context/NotificationContext';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import PeopleIcon from '@mui/icons-material/People';
@@ -12,12 +12,12 @@ export default function DashboardPage() {
   const [stats, setStats] = useState({
     totalPosts: 0,
     viewsCount: 0,
-    popularTags: "-",
-    posts: []
+    popularTags: '-',
+    posts: [],
   });
   const [loading, setLoading] = useState(false);
 
-  const { showNotification } = useNotification(); 
+  const { showNotification } = useNotification();
 
   useEffect(() => {
     async function fetchStats() {
@@ -27,14 +27,17 @@ export default function DashboardPage() {
         if (response.ok) {
           const data = await response.json();
           setStats(data);
-          showNotification('Statistics loaded successfully!', 'success'); 
+          showNotification('Statistics loaded successfully!', 'success');
         } else {
           console.error('Failed to fetch stats');
-          showNotification('Failed to load statistics.', 'danger'); 
+          showNotification('Failed to load statistics.', 'danger');
         }
       } catch (error) {
         console.error('Error fetching stats:', error);
-        showNotification('An error occurred while fetching statistics.', 'danger'); 
+        showNotification(
+          'An error occurred while fetching statistics.',
+          'danger'
+        );
       } finally {
         setLoading(false);
       }
@@ -43,7 +46,10 @@ export default function DashboardPage() {
     fetchStats();
   }, [selectedYear, showNotification]);
 
-  const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
+  const years = Array.from(
+    { length: 5 },
+    (_, i) => new Date().getFullYear() - i
+  );
 
   return (
     <div>
@@ -54,7 +60,10 @@ export default function DashboardPage() {
 
       {/* Year Filter */}
       <div className="mb-6">
-        <label htmlFor="year" className="block mb-2 text-sm font-medium text-gray-600">
+        <label
+          htmlFor="year"
+          className="block mb-2 text-sm font-medium text-gray-600"
+        >
           Select Year
         </label>
         <select
@@ -79,7 +88,9 @@ export default function DashboardPage() {
           <div className="flex items-center p-6 bg-white rounded-lg shadow-md">
             <PostAddIcon className="text-[#4c24e5] w-10 h-10 mr-6" />
             <div>
-              <h3 className="text-sm font-semibold text-gray-400">Total Posts</h3>
+              <h3 className="text-sm font-semibold text-gray-400">
+                Total Posts
+              </h3>
               <p className="text-3xl font-bold">{stats.totalPosts}</p>
             </div>
           </div>
@@ -87,7 +98,9 @@ export default function DashboardPage() {
           <div className="flex items-center p-6 bg-white rounded-lg shadow-md">
             <VisibilityIcon className="text-[#4c24e5] w-10 h-10 mr-6" />
             <div>
-              <h3 className="text-sm font-semibold text-gray-400">Total Views</h3>
+              <h3 className="text-sm font-semibold text-gray-400">
+                Total Views
+              </h3>
               <p className="text-3xl font-bold">{stats.viewsCount}</p>
             </div>
           </div>
@@ -95,7 +108,9 @@ export default function DashboardPage() {
           <div className="flex items-center p-6 bg-white rounded-lg shadow-md">
             <PeopleIcon className="text-[#4c24e5] w-10 h-10 mr-6" />
             <div>
-              <h3 className="text-sm font-semibold text-gray-400">Popular Tags</h3>
+              <h3 className="text-sm font-semibold text-gray-400">
+                Popular Tags
+              </h3>
               <p className="text-3xl font-bold">{stats.popularTags}</p>
             </div>
           </div>
@@ -109,18 +124,24 @@ export default function DashboardPage() {
           <ul className="space-y-4">
             {stats.posts.map((post, index) => (
               <li key={index} className="p-4 bg-white rounded-lg shadow-md">
-                <p className="font-semibold">Published a post: &quot;{post.title}&quot;</p>
+                <p className="font-semibold">
+                  Published a post: &quot;{post.title}&quot;
+                </p>
                 <p className="text-sm text-gray-500">
                   {post.createdAt
-                    ? formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })
-                    : "Date not available"}
+                    ? formatDistanceToNow(new Date(post.createdAt), {
+                        addSuffix: true,
+                      })
+                    : 'Date not available'}
                 </p>
               </li>
             ))}
           </ul>
         ) : (
           <div className="p-4 bg-white rounded-lg shadow-md">
-            <p className="text-sm text-gray-500">You have no recent activity yet.</p>
+            <p className="text-sm text-gray-500">
+              You have no recent activity yet.
+            </p>
           </div>
         )}
       </div>

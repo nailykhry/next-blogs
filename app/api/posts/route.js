@@ -34,7 +34,7 @@ export async function GET(req) {
       await prisma.post.update({
         where: { id: posts[0].id },
         data: {
-          views: (posts[0].views || 0) + 1, 
+          views: (posts[0].views || 0) + 1,
         },
       });
     }
@@ -79,7 +79,7 @@ export async function POST(req) {
         title,
         slug,
         content,
-        views:0,
+        views: 0,
         userId: session.user.id,
         categories: {
           connect: categories.map((id) => ({ id })),
