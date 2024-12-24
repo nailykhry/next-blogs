@@ -29,17 +29,18 @@ export default function EditPostPage() {
       try {
         const categoriesResponse = await fetch('/api/categories');
         const categoriesData = await categoriesResponse.json();
+        console.log(categoriesData);
         setCategories(categoriesData);
 
         const postResponse = await fetch(`/api/posts?slug=${slug}`);
         if (postResponse.ok) {
           const postData = await postResponse.json();
-          setId(postData[0].id);
-          setTitle(postData[0].title);
-          setContent(postData[0].content);
+          setId(postData.posts[0].id);
+          setTitle(postData.posts[0].title);
+          setContent(postData.posts[0].content);
 
           setSelectedCategories(
-            postData[0].categories.map((category) => ({
+            postData.posts[0].categories.map((category) => ({
               id: category.id,
               name: category.name,
             }))
@@ -92,7 +93,6 @@ export default function EditPostPage() {
     <div>
       <h2 className="mb-6 text-2xl font-semibold">Edit Post</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Title Input */}
         <div>
           <label htmlFor="title" className="block text-lg font-bold">
             Title
@@ -108,7 +108,6 @@ export default function EditPostPage() {
           />
         </div>
 
-        {/* Categories Dropdown */}
         <div className="w-full">
           <label htmlFor="categories" className="block text-lg font-bold">
             Categories
@@ -119,7 +118,6 @@ export default function EditPostPage() {
             multiple
           >
             <div className="relative">
-              {/* Dropdown Button */}
               <Listbox.Button className="w-full px-4 py-3 text-left bg-white border rounded-lg shadow-sm focus:outline-none">
                 {selectedCategories.length > 0
                   ? selectedCategories
@@ -128,7 +126,6 @@ export default function EditPostPage() {
                   : 'Select categories...'}
               </Listbox.Button>
 
-              {/* Dropdown Options */}
               <Listbox.Options className="absolute z-10 w-full mt-2 overflow-y-auto bg-white border rounded-lg shadow-lg max-h-60">
                 {categories.map((category) => (
                   <Listbox.Option
@@ -157,13 +154,11 @@ export default function EditPostPage() {
           </Listbox>
         </div>
 
-        {/* Content Editor */}
         <div>
           <label className="block text-lg font-bold">Content</label>
           <TextEditor value={content} onChange={(value) => setContent(value)} />
         </div>
 
-        {/* Submit and Cancel Buttons */}
         <div className="flex gap-4">
           <Link href="/user/post">
             <button

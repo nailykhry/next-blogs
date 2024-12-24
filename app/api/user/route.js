@@ -47,7 +47,6 @@ export async function PATCH(req) {
       );
     }
 
-    // Prepare update data
     const updateData = {};
 
     if (name) updateData.name = name;

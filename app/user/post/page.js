@@ -1,68 +1,32 @@
-'use client';
-import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import Link from 'next/link';
-import PostCard from '@/app/components/PostCard';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import SearchBar from '@/app/components/SearchBar';
 import Pagination from '@/app/components/Pagination';
-import Loading from '@/app/components/Loading';
+import PostCard from '@/app/components/PostCard';
+import Link from 'next/link';
 
-export default function PostsPage() {
-  const [posts, setPosts] = useState([]);
-  const [filteredPosts, setFilteredPosts] = useState([]);
+export default async function PostsPage({ searchParams }) {
+  const session = await getServerSession(authOptions);
 
-  /* eslint-disable */
-  const [searchQuery, setSearchQuery] = useState('');
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  const { data: session, status } = useSession();
+  const { page = '1', search = '' } = await searchParams;
+  const currentPage = parseInt(page, 10);
+  const searchQuery = search;
 
   const POSTS_PER_PAGE = 6;
-  const USER_ID = session?.user?.id;
-
-  const fetchPosts = async (userId) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/posts?userId=${userId}`);
-      const data = await response.json();
-      setPosts(data);
-      setFilteredPosts(data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (USER_ID) {
-      fetchPosts(USER_ID);
-    }
-  }, [USER_ID]);
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    const filtered = posts.filter(
-      (post) =>
-        post.title.toLowerCase().includes(query.toLowerCase()) ||
-        post.content.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredPosts(filtered);
-    setPage(1);
-  };
-
-  const startIndex = (page - 1) * POSTS_PER_PAGE;
-  const currentPosts = filteredPosts.slice(
-    startIndex,
-    startIndex + POSTS_PER_PAGE
+  const userId = session?.user?.id;
+  const res = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/posts?userId=${userId}&page=${currentPage}&pageSize=${POSTS_PER_PAGE}&search=${encodeURIComponent(searchQuery)}`,
+    { method: 'GET' }
   );
-  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
 
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
-  };
-
-  if (status === 'loading' || isLoading) {
-    return <Loading />;
+  if (!res.ok) {
+    throw new Error(`Failed to fetch posts: ${res.statusText}`);
   }
+
+  const data = await res.json();
+  const totalPosts = data.totalPosts;
+  const posts = data.posts;
+  const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
   return (
     <div>
@@ -71,12 +35,12 @@ export default function PostsPage() {
         See your blog posts and manage your content.
       </p>
 
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar initialQuery={searchQuery} />
 
-      {filteredPosts.length === 0 ? (
+      {posts.length === 0 ? (
         <div className="text-center p-6 mt-6 bg-[#f9fafb] rounded-lg shadow-md">
           <h3 className="text-lg font-semibold text-black">
-            You haven&apos;t created any posts yet!
+            There is no post yet!
           </h3>
           <p className="mb-4 text-sm text-gray-500">
             Start sharing your thoughts with your audience.
@@ -91,7 +55,7 @@ export default function PostsPage() {
       ) : (
         <div>
           <div className="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
-            {currentPosts.map((post) => (
+            {posts.map((post) => (
               <PostCard
                 key={post.id}
                 title={post.title}
@@ -102,11 +66,7 @@ export default function PostsPage() {
             ))}
           </div>
 
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          <Pagination currentPage={currentPage} totalPages={totalPages} />
         </div>
       )}
     </div>

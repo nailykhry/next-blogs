@@ -1,66 +1,28 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import PostCard from '@/app/components/PostCard';
 import SearchBar from '@/app/components/SearchBar';
 import Pagination from '@/app/components/Pagination';
-import Loading from '@/app/components/Loading';
+import PostCard from '@/app/components/PostCard';
+import Link from 'next/link';
 
-export default function PostsPage() {
-  const [posts, setPosts] = useState([]);
-  const [filteredPosts, setFilteredPosts] = useState([]);
-
-  /* eslint-disable */
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [page, setPage] = useState(1);
+export default async function PostsPage({ searchParams }) {
+  const { page = '1', search = '' } = await searchParams;
+  const currentPage = parseInt(page, 10);
+  const searchQuery = search;
 
   const POSTS_PER_PAGE = 6;
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`/api/posts`);
-        const data = await response.json();
-        setPosts(data);
-        setFilteredPosts(data);
-      } catch (error) {
-        console.error('Failed to fetch posts:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPosts();
-  }, []);
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    const filtered = posts.filter(
-      (post) =>
-        post.title.toLowerCase().includes(query.toLowerCase()) ||
-        post.content.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredPosts(filtered);
-    setPage(1);
-  };
-
-  const startIndex = (page - 1) * POSTS_PER_PAGE;
-  const currentPosts = filteredPosts.slice(
-    startIndex,
-    startIndex + POSTS_PER_PAGE
+  const res = await fetch(
+    `${process.env.NEXTAUTH_URL}/api/posts?page=${currentPage}&pageSize=${POSTS_PER_PAGE}&search=${encodeURIComponent(searchQuery)}`,
+    { method: 'GET' }
   );
-  const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
 
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
-  };
-
-  if (isLoading) {
-    return <Loading />;
+  if (!res.ok) {
+    throw new Error(`Failed to fetch posts: ${res.statusText}`);
   }
+
+  const data = await res.json();
+  const totalPosts = data.totalPosts;
+  const posts = data.posts;
+  const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
   return (
     <div>
@@ -70,9 +32,9 @@ export default function PostsPage() {
         help you grow.
       </p>
 
-      <SearchBar onSearch={handleSearch} />
+      <SearchBar initialQuery={searchQuery} />
 
-      {filteredPosts.length === 0 ? (
+      {posts.length === 0 ? (
         <div className="text-center p-6 mt-6 bg-[#f9fafb] rounded-lg shadow-md">
           <h3 className="text-lg font-semibold text-black">
             There is no post yet!
@@ -90,7 +52,7 @@ export default function PostsPage() {
       ) : (
         <div>
           <div className="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 md:grid-cols-3">
-            {currentPosts.map((post) => (
+            {posts.map((post) => (
               <PostCard
                 key={post.id}
                 title={post.title}
@@ -101,11 +63,7 @@ export default function PostsPage() {
             ))}
           </div>
 
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          <Pagination currentPage={currentPage} totalPages={totalPages} />
         </div>
       )}
     </div>

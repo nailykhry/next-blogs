@@ -1,53 +1,34 @@
-'use client';
-
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 
-export default function Header() {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default async function Header() {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user) {
+    redirect('/auth/login');
+  }
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch('/api/user');
-        if (response.ok) {
-          const data = await response.json();
-          setUser(data.user);
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.error('Error fetching user:', error);
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+  let user = null;
 
-    fetchUser();
-  }, []);
+  try {
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/user`, {
+      cache: 'no-store',
+      method: 'GET',
+      headers: await headers(),
+    });
 
-  if (loading) {
-    return (
-      <header className="flex items-center justify-between p-4 text-black">
-        <h1 className="text-sm font-semibold">Loading your dashboard...</h1>
-      </header>
-    );
+    if (response.ok) {
+      const data = await response.json();
+      user = data.user;
+    }
+  } catch (error) {
+    console.error('Error fetching user:', error);
   }
 
   if (!user) {
-    return (
-      <header className="flex items-center justify-between p-4 text-black">
-        <h1 className="text-sm font-semibold">You are not logged in</h1>
-        <button
-          className="p-2 text-sm text-white bg-blue-500 rounded"
-          onClick={() => (window.location.href = '/api/auth/signin')}
-        >
-          Login
-        </button>
-      </header>
-    );
+    redirect('/auth/login');
   }
 
   return (

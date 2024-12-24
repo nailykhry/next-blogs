@@ -38,7 +38,7 @@ export default function PostPage({ params: paramsPromise }) {
         if (data.length === 0) {
           router.replace('/404');
         } else {
-          setPost(data[0]);
+          setPost(data.posts[0]);
         }
       } catch (err) {
         setError(err.message);

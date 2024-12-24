@@ -1,12 +1,12 @@
 'use client';
 import { useEffect, useState } from 'react';
-import SearchBar from './components/SearchBar';
-import Navbar from './components/Navbar';
-import PostCard from './components/PostCard';
-import Footer from './components/Footer';
-import StatusLoad from './components/StatusLoad';
-import InfiniteScroll from './components/InfiniteScroll';
-import MainHeader from './components/MainHeader';
+import SearchBarStatic from '@/app/components/SearchBarStatic';
+import Navbar from '@/app/components/Navbar';
+import PostCard from '@/app/components/PostCard';
+import Footer from '@/app/components/Footer';
+import StatusLoad from '@/app/components/StatusLoad';
+import InfiniteScroll from '@/app/components/InfiniteScroll';
+import MainHeader from '@/app/components/MainHeader';
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -20,20 +20,26 @@ export default function Home() {
     async function fetchPosts() {
       const response = await fetch('/api/posts');
       const data = await response.json();
-      setPosts(data);
-      setFilteredPosts(data);
-      setDisplayedPosts(data.slice(0, postsPerLoad));
+      setPosts(data.posts);
+      setFilteredPosts(data.posts);
+      setDisplayedPosts(data.posts.slice(0, postsPerLoad));
     }
     fetchPosts();
   }, []);
 
   const handleSearch = (query) => {
-    const filtered = posts.filter((post) =>
-      post.title.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredPosts(filtered);
-    setDisplayedPosts(filtered.slice(0, postsPerLoad));
-    setHasMore(filtered.length > postsPerLoad);
+    if (!query) {
+      setFilteredPosts(posts);
+      setDisplayedPosts(posts.slice(0, postsPerLoad));
+      setHasMore(posts.length > postsPerLoad);
+    } else {
+      const filtered = posts.filter((post) =>
+        post.title.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredPosts(filtered);
+      setDisplayedPosts(filtered.slice(0, postsPerLoad));
+      setHasMore(filtered.length > postsPerLoad);
+    }
   };
 
   const loadMorePosts = () => {
@@ -61,7 +67,7 @@ export default function Home() {
       <main className="flex-grow">
         <div className="container flex flex-col items-center justify-center pt-20 mx-auto">
           <MainHeader />
-          <SearchBar onSearch={handleSearch} />
+          <SearchBarStatic onSearch={handleSearch} />
 
           {!filteredPosts?.length && (
             <h2 className="pt-5 mt-5 text-center text-gray-500">

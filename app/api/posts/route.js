@@ -2,11 +2,14 @@ import { NextResponse } from 'next/server';
 import prisma from '@/app/lib/prismaClient';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
-
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
     const query = Object.fromEntries(searchParams.entries());
+
+    const page = query.page ? parseInt(query.page, 10) : null;
+    const pageSize = query.pageSize ? parseInt(query.pageSize, 10) : null;
+    const searchTerm = query.search || '';
 
     const filters = {
       categories: query.categories
@@ -15,8 +18,8 @@ export async function GET(req) {
           }
         : undefined,
       userId: query.userId ? parseInt(query.userId) : undefined,
-      title: query.title
-        ? { contains: query.title, mode: 'insensitive' }
+      title: searchTerm
+        ? { contains: searchTerm, mode: 'insensitive' }
         : undefined,
       slug: query.slug || undefined,
     };
@@ -25,23 +28,35 @@ export async function GET(req) {
       (key) => filters[key] === undefined && delete filters[key]
     );
 
-    const posts = await prisma.post.findMany({
-      include: { user: true, categories: true },
-      where: filters,
-    });
+    const totalPosts = await prisma.post.count({ where: filters });
 
-    if (query.slug && posts.length > 0) {
-      await prisma.post.update({
-        where: { id: posts[0].id },
-        data: {
-          views: (posts[0].views || 0) + 1,
-        },
+    let posts;
+    if (!page || !pageSize) {
+      posts = await prisma.post.findMany({
+        include: { user: true, categories: true },
+        where: filters,
+        orderBy: { createdAt: 'desc' },
+      });
+    } else {
+      posts = await prisma.post.findMany({
+        include: { user: true, categories: true },
+        where: filters,
+        orderBy: { createdAt: 'desc' },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
       });
     }
 
-    return NextResponse.json(posts, { status: 200 });
+    return NextResponse.json(
+      {
+        posts,
+        totalPosts,
+        page,
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    console.log(error);
+    console.error('Error fetching posts:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

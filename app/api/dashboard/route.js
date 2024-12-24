@@ -39,16 +39,16 @@ export async function GET(req) {
         orderBy: { createdAt: 'desc' },
         take: 3,
       }),
-      
+
       prisma.post.count({
         where: filters,
       }),
-    
+
       prisma.post.aggregate({
         where: filters,
         _sum: { views: true },
       }),
-      
+
       prisma.Category.findMany({
         select: { name: true },
         where: {
